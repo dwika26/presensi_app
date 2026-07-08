@@ -1,89 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Design tokens — tema "Stempel Akademik"
+/// Design tokens — Tema Modern Premium (Slate & Lime)
 class AppColors {
   AppColors._();
 
-  static const inkNavy = Color(0xFF12213D);
-  static const navySurface = Color(0xFF1C2F52);
-  static const brass = Color(0xFFC9A227);
-  static const ivory = Color(0xFFF4EEDD);
-  static const parchment = Color(0xFFFAF7EF);
-  static const charcoal = Color(0xFF232323);
-  static const sage = Color(0xFF6B9080);
-  static const rust = Color(0xFFA8503B);
+  static const inkNavy = Color(0xFF0F172A); // Slate 900 (Warna Utama/Teks Gelap)
+  static const navySurface = Color(0xFF1E293B); // Slate 800 (Card Gelap)
+  static const brass = Color(0xFFD9E930); // Lime Green Accent (Warna Aksen Modern)
+  static const ivory = Color(0xFFFFFFFF); // Putih Bersih (Card Background)
+  static const parchment = Color(0xFFF8FAFC); // Slate 50 (Scaffold Background)
+  static const charcoal = Color(0xFF334155); // Slate 700 (Teks Sekunder)
+  static const sage = Color(0xFF10B981); // Emerald Green (Status Sukses/Hadir)
+  static const rust = Color(0xFFEF4444); // Red (Status Error/Absen)
 }
 
 class AppTheme {
   AppTheme._();
 
   static ThemeData get theme {
-    final base = ThemeData(useMaterial3: true, brightness: Brightness.light);
+    final base = ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+    );
 
     return base.copyWith(
       scaffoldBackgroundColor: AppColors.parchment,
       colorScheme: base.colorScheme.copyWith(
-        primary: AppColors.brass,
-        onPrimary: AppColors.inkNavy,
-        secondary: AppColors.inkNavy,
-        surface: AppColors.parchment,
+        primary: AppColors.inkNavy,
+        onPrimary: Colors.white,
+        secondary: AppColors.brass,
+        onSecondary: AppColors.inkNavy,
+        surface: AppColors.ivory,
         error: AppColors.rust,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.inkNavy,
-        foregroundColor: AppColors.ivory,
+        backgroundColor: Colors.transparent,
+        foregroundColor: AppColors.inkNavy,
         elevation: 0,
-        centerTitle: false,
-        titleTextStyle: GoogleFonts.fraunces(
-          color: AppColors.ivory,
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.2,
+        centerTitle: true,
+        titleTextStyle: GoogleFonts.plusJakartaSans(
+          color: AppColors.inkNavy,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.2,
         ),
       ),
-      textTheme: GoogleFonts.manropeTextTheme(base.textTheme).copyWith(
-        headlineMedium: GoogleFonts.fraunces(
-          fontSize: 28,
-          fontWeight: FontWeight.w600,
-          color: AppColors.charcoal,
+      textTheme: GoogleFonts.plusJakartaSansTextTheme(base.textTheme).copyWith(
+        headlineMedium: GoogleFonts.plusJakartaSans(
+          fontSize: 26,
+          fontWeight: FontWeight.w800,
+          color: AppColors.inkNavy,
+          letterSpacing: -0.5,
         ),
-        titleLarge: GoogleFonts.fraunces(
+        titleLarge: GoogleFonts.plusJakartaSans(
           fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: AppColors.charcoal,
+          fontWeight: FontWeight.w700,
+          color: AppColors.inkNavy,
+          letterSpacing: -0.3,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.brass,
-          foregroundColor: AppColors.inkNavy,
+          backgroundColor: AppColors.inkNavy,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          textStyle: GoogleFonts.manrope(fontWeight: FontWeight.w700, letterSpacing: 0.3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontWeight: FontWeight.w700,
+            fontSize: 15,
+            letterSpacing: 0.1,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           elevation: 0,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.inkNavy,
-          side: const BorderSide(color: AppColors.brass, width: 1.4),
+          side: const BorderSide(color: AppColors.inkNavy, width: 1.5),
           padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: AppColors.inkNavy.withOpacity(0.15)),
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.inkNavy.withOpacity(0.1)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: AppColors.inkNavy.withOpacity(0.08)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.brass, width: 1.6),
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: AppColors.inkNavy, width: 1.6),
         ),
-        labelStyle: GoogleFonts.manrope(color: AppColors.charcoal.withOpacity(0.7)),
+        labelStyle: GoogleFonts.plusJakartaSans(
+          color: AppColors.charcoal.withOpacity(0.6),
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
