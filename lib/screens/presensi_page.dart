@@ -267,11 +267,10 @@ class _PresensiFormState extends State<_PresensiForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Section Title
                 const Text(
                   'Formulir Kehadiran',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: AppColors.inkNavy,
                   ),
@@ -393,12 +392,12 @@ class _PresensiFormState extends State<_PresensiForm> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                             const Text(
                               'Kampus Tengah Undiksha',
                               style: TextStyle(
                                 color: AppColors.inkNavy,
                                 fontWeight: FontWeight.w800,
-                                fontSize: 14,
+                                fontSize: 15,
                               ),
                             ),
                             const SizedBox(height: 3),
@@ -407,7 +406,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                               style: TextStyle(
                                 color: AppColors.sage,
                                 fontWeight: FontWeight.w700,
-                                fontSize: 12,
+                                fontSize: 13,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -415,7 +414,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                               'Koordinat: -8.11620, 115.08940',
                               style: TextStyle(
                                 color: AppColors.charcoal.withOpacity(0.7),
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -427,11 +426,10 @@ class _PresensiFormState extends State<_PresensiForm> {
                 ),
                 const SizedBox(height: 20),
 
-                // Photo Area Title
                 const Text(
                   'Bukti Kehadiran Fisik',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.inkNavy,
                   ),

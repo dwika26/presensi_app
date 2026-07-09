@@ -181,7 +181,7 @@ class RiwayatPage extends StatelessWidget {
                                     style: const TextStyle(
                                       color: AppColors.inkNavy,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      fontSize: 16,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
@@ -189,7 +189,7 @@ class RiwayatPage extends StatelessWidget {
                                     'NIM ${p.nim}',
                                     style: TextStyle(
                                       color: AppColors.charcoal.withOpacity(0.7),
-                                      fontSize: 12,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -208,7 +208,7 @@ class RiwayatPage extends StatelessWidget {
                                             'Presenter: $presenterName',
                                             style: const TextStyle(
                                               color: AppColors.inkNavy,
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w500,
                                             ),
                                             maxLines: 1,
@@ -231,7 +231,7 @@ class RiwayatPage extends StatelessWidget {
                                         _formatTanggal(p.createdAt),
                                         style: TextStyle(
                                           color: AppColors.charcoal.withOpacity(0.8),
-                                          fontSize: 11,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),

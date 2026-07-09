@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const Text(
                                   'Selamat Datang, Adel!',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.inkNavy,
                                   ),
@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const Text(
                                   'NIM: 2415091032',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.charcoal,
                                   ),
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text(
                                   'Program Studi Sistem Informasi',
                                   style: TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 12,
                                     color: AppColors.charcoal.withOpacity(0.6),
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const Text(
                                   'Poin Kehadiran',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.inkNavy,
                                   ),
@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text(
                                   'Anda telah menghadiri $myCount dari target $targetCount seminar proposal semester ini.',
                                   style: TextStyle(
-                                    fontSize: 12.5,
+                                    fontSize: 13,
                                     color: AppColors.charcoal.withOpacity(0.8),
                                     height: 1.4,
                                     fontWeight: FontWeight.w500,
@@ -332,7 +332,7 @@ class _RealTimeClockCardState extends State<_RealTimeClockCard> {
           Text(
             _timeString,
             style: const TextStyle(
-              fontSize: 28,
+              fontSize: 32,
               fontWeight: FontWeight.w900,
               color: AppColors.inkNavy,
               letterSpacing: 0.5,
@@ -342,7 +342,7 @@ class _RealTimeClockCardState extends State<_RealTimeClockCard> {
           Text(
             _dateString,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 14,
               color: AppColors.charcoal.withOpacity(0.6),
               fontWeight: FontWeight.w500,
             ),

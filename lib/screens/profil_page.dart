@@ -57,12 +57,11 @@ class ProfilPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 18),
-                    // Group Name & Class
                     const Text(
                       'Kelompok 3',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: AppColors.inkNavy,
                       ),
@@ -71,7 +70,7 @@ class ProfilPage extends StatelessWidget {
                     const Text(
                       'Kelas SI 4A',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: AppColors.brass,
                       ),
@@ -101,12 +100,11 @@ class ProfilPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Group Members Section
             const Text(
               'Tim Pengembang Kelompok',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
                 color: AppColors.inkNavy,
               ),
             ),
@@ -157,7 +155,7 @@ class ProfilPage extends StatelessWidget {
                               style: const TextStyle(
                                 color: AppColors.inkNavy,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                fontSize: 15,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -165,7 +163,7 @@ class ProfilPage extends StatelessWidget {
                               'NIM ${member['nim']}',
                               style: const TextStyle(
                                 color: AppColors.charcoal,
-                                fontSize: 12,
+                                fontSize: 13,
                               ),
                             ),
                           ],
@@ -194,7 +192,7 @@ class ProfilPage extends StatelessWidget {
               Text(
                 label,
                 style: const TextStyle(
-                  fontSize: 11,
+                  fontSize: 12,
                   color: AppColors.charcoal,
                   fontWeight: FontWeight.w500,
                 ),
@@ -203,7 +201,7 @@ class ProfilPage extends StatelessWidget {
               Text(
                 value,
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.inkNavy,
                 ),
