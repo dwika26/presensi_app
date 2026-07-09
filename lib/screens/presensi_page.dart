@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
 import '../cubit/upload_foto_cubit.dart';
 import '../cubit/upload_foto_state.dart';
 import '../config/app_theme.dart';
@@ -37,6 +38,48 @@ class _PresensiFormState extends State<_PresensiForm> {
   DateTime? _selectedDate;
   XFile? _fotoFile;
   Uint8List? _fotoBytes;
+
+  double _latitude = -8.1162;
+  double _longitude = 115.0894;
+  bool _isRealGps = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initLocation();
+  }
+
+  Future<void> _initLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) return;
+      }
+
+      if (permission == LocationPermission.deniedForever) return;
+
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 3),
+        ),
+      );
+
+      if (mounted) {
+        setState(() {
+          _latitude = position.latitude;
+          _longitude = position.longitude;
+          _isRealGps = true;
+        });
+      }
+    } catch (e) {
+      debugPrint("Gagal mengambil GPS: $e");
+    }
+  }
 
   @override
   void dispose() {
@@ -221,13 +264,13 @@ class _PresensiFormState extends State<_PresensiForm> {
     // 2. Concatenate nama logic
     final fullName = "$studentName | Presenter: $presenterName | Prodi: $presenterProdi | Tanggal: $tanggal";
 
-    // 3. Submit with static Undiksha Kampus Tengah coordinates
+    // 3. Submit with real-time GPS (or fallback) coordinates
     context.read<UploadFotoCubit>().submit(
       nama: fullName,
       nim: nim,
       foto: _fotoFile!,
-      latitude: -8.1162,
-      longitude: 115.0894,
+      latitude: _latitude,
+      longitude: _longitude,
     );
   }
 
@@ -392,18 +435,20 @@ class _PresensiFormState extends State<_PresensiForm> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             const Text(
-                              'Kampus Tengah Undiksha',
-                              style: TextStyle(
+                             Text(
+                              _isRealGps ? 'Lokasi Perangkat (Real-time)' : 'Kampus Tengah Undiksha',
+                              style: const TextStyle(
                                 color: AppColors.inkNavy,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 15,
                               ),
                             ),
                             const SizedBox(height: 3),
-                            const Text(
-                              'Lokasi: Kampus Tengah Undiksha (Akurasi Tinggi)',
-                              style: TextStyle(
+                            Text(
+                              _isRealGps 
+                                  ? 'Lokasi: Koordinat GPS Aktif' 
+                                  : 'Lokasi: Kampus Tengah Undiksha (Akurasi Tinggi)',
+                              style: const TextStyle(
                                 color: AppColors.sage,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
@@ -411,7 +456,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Koordinat: -8.11620, 115.08940',
+                              'Koordinat: ${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}',
                               style: TextStyle(
                                 color: AppColors.charcoal.withOpacity(0.7),
                                 fontSize: 12,
