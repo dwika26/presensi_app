@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../config/app_theme.dart';
-import '../widgets/seal_badge.dart';
 import '../widgets/sifors_logo.dart';
 import '../services/presensi_service.dart';
 import '../dto/presensi.dart';
