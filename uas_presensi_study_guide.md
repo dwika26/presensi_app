@@ -22,37 +22,37 @@ Dokumen ini disusun khusus sebagai bahan belajar Anda untuk menghadapi ujian lis
 Berikut adalah lokasi persis pemenuhan kriteria wajib UAS di dalam kode Anda agar Anda bisa menunjukkannya langsung kepada dosen penguji:
 
 ### 1. Widget Rendering (Penyusunan & Tampilan UI)
-* **File Utama**: [main_navigation_screen.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/main_navigation_screen.dart) dan [presensi_page.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart).
+* **File Utama**: [main_navigation_screen.dart](lib/screens/main_navigation_screen.dart) dan [presensi_page.dart](lib/screens/presensi_page.dart).
 * **Fungsi/Baris Kode**:
-  * **Navigasi Tab Utama**: `MainNavigationScreen` merender navigasi tab bawah menggunakan `BottomNavigationBar` ([main_navigation_screen.dart:L29-50](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/main_navigation_screen.dart#L29-50)). Bodi aplikasi dirender dinamis berdasarkan indeks terpilih ([main_navigation_screen.dart:L28](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/main_navigation_screen.dart#L28)).
-  * **Form Input & Validasi Visual**: `_PresensiPageState.build` merender form input data berupa `TextField` untuk Nama, NIM, Nama Presenter, Prodi Presenter, dan Tanggal Seminar, serta menampilkan *conditional rendering* berdasarkan status foto ([presensi_page.dart:L230-330](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart#L230-330)). Jika foto kosong, merender kotak instruksi kamera; jika terisi, menampilkan gambar hasil jepretan kamera secara langsung.
-  * **Custom Widget**: `SealBadge` ([seal_badge.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/widgets/seal_badge.dart)) merender stempel dekoratif dengan logo dinamis Navy senada yang dipakai di halaman Home dan dialog sukses.
+  * **Navigasi Tab Utama**: `MainNavigationScreen` merender navigasi tab bawah menggunakan `BottomNavigationBar` ([main_navigation_screen.dart:L29-50](lib/screens/main_navigation_screen.dart#L29-50)). Bodi aplikasi dirender dinamis berdasarkan indeks terpilih ([main_navigation_screen.dart:L28](lib/screens/main_navigation_screen.dart#L28)).
+  * **Form Input & Validasi Visual**: `_PresensiPageState.build` merender form input data berupa `TextField` untuk Nama, NIM, Nama Presenter, Prodi Presenter, dan Tanggal Seminar, serta menampilkan *conditional rendering* berdasarkan status foto ([presensi_page.dart:L230-330](lib/screens/presensi_page.dart#L230-330)). Jika foto kosong, merender kotak instruksi kamera; jika terisi, menampilkan gambar hasil jepretan kamera secara langsung.
+  * **Custom Widget**: `SealBadge` ([seal_badge.dart](lib/widgets/seal_badge.dart)) merender stempel dekoratif dengan logo dinamis Navy senada yang dipakai di halaman Home dan dialog sukses.
 
 ### 2. Navigation & Routing (Perpindahan Halaman)
-* **File Utama**: [main.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/main.dart) dan [riwayat_page.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/riwayat_page.dart).
+* **File Utama**: [main.dart](lib/main.dart) dan [riwayat_page.dart](lib/screens/riwayat_page.dart).
 * **Fungsi/Baris Kode**:
-  * **Declarative / Named Routing (Rute Terpusat)**: Diinisialisasi di `MaterialApp` menggunakan properti `initialRoute` dan `routes` ([main.dart:L17-20](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/main.dart#L17-20)) untuk mengarahkan ke halaman dasar (`'/'` mengarah ke `MainNavigationScreen`).
-  * **Imperative Routing & Callback**: Di `RiwayatPage`, ketika item daftar presensi ditekan, aplikasi berpindah ke detail presensi menggunakan `Navigator.push<bool>` dengan `MaterialPageRoute` ([riwayat_page.dart:L137-150](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/riwayat_page.dart#L137-150)). Setelah kembali, aplikasi memeriksa hasil pop untuk mengetahui apakah item baru saja dihapus guna me-refresh daftar secara real-time.
+  * **Declarative / Named Routing (Rute Terpusat)**: Diinisialisasi di `MaterialApp` menggunakan properti `initialRoute` dan `routes` ([main.dart:L17-20](lib/main.dart#L17-20)) untuk mengarahkan ke halaman dasar (`'/'` mengarah ke `MainNavigationScreen`).
+  * **Imperative Routing & Callback**: Di `RiwayatPage`, ketika item daftar presensi ditekan, aplikasi berpindah ke detail presensi menggunakan `Navigator.push<bool>` dengan `MaterialPageRoute` ([riwayat_page.dart:L137-150](lib/screens/riwayat_page.dart#L137-150)). Setelah kembali, aplikasi memeriksa hasil pop untuk mengetahui apakah item baru saja dihapus guna me-refresh daftar secara real-time.
 
 ### 3. Network & Data Fetching (Komunikasi Data API)
-* **File Utama**: [presensi_service.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/services/presensi_service.dart).
+* **File Utama**: [presensi_service.dart](lib/services/presensi_service.dart).
 * **Fungsi/Baris Kode**:
-  * **GET Request (Ambil Data)**: Fungsi `getPresensiList()` menggunakan method `http.get` untuk memanggil endpoint database REST API Supabase, lalu mendaur-ulang respon JSON menjadi objek list Flutter ([presensi_service.dart:L13-25](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/services/presensi_service.dart#L13-25)).
-  * **POST Request (Kirim Data Baru)**: Fungsi `createPresensi(Presensi presensi)` menggunakan method `http.post` untuk mengirim data berformat JSON lengkap (termasuk kolom terpisah untuk nama presenter, prodi, dan tanggal) ke database Supabase ([presensi_service.dart:L27-41](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/services/presensi_service.dart#L27-41)).
-  * **DELETE Request (Hapus Data)**: Fungsi `deletePresensi(int id)` menggunakan method `http.delete` ke endpoint Supabase dengan parameter saringan `?id=eq.$id` untuk menghapus baris data kehadiran ([presensi_service.dart:L59-68](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/services/presensi_service.dart#L59-68)).
+  * **GET Request (Ambil Data)**: Fungsi `getPresensiList()` menggunakan method `http.get` untuk memanggil endpoint database REST API Supabase, lalu mendaur-ulang respon JSON menjadi objek list Flutter ([presensi_service.dart:L13-25](lib/services/presensi_service.dart#L13-25)).
+  * **POST Request (Kirim Data Baru)**: Fungsi `createPresensi(Presensi presensi)` menggunakan method `http.post` untuk mengirim data berformat JSON lengkap (termasuk kolom terpisah untuk nama presenter, prodi, dan tanggal) ke database Supabase ([presensi_service.dart:L27-41](lib/services/presensi_service.dart#L27-41)).
+  * **DELETE Request (Hapus Data)**: Fungsi `deletePresensi(int id)` menggunakan method `http.delete` ke endpoint Supabase dengan parameter saringan `?id=eq.$id` untuk menghapus baris data kehadiran ([presensi_service.dart:L59-68](lib/services/presensi_service.dart#L59-68)).
 
 ### 4. Camera & Upload (Pengambilan Gambar & Unggah File)
-* **File Utama**: [presensi_page.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart) dan [storage_service.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/services/storage_service.dart).
+* **File Utama**: [presensi_page.dart](lib/screens/presensi_page.dart) dan [storage_service.dart](lib/services/storage_service.dart).
 * **Fungsi/Baris Kode**:
-  * **Meminta Izin Kamera**: Menggunakan `Permission.camera.request()` dari package `permission_handler` sebelum kamera dinyalakan ([presensi_page.dart:L240-250](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart#L240-250)).
-  * **Mengakses Kamera HP**: Menggunakan `ImagePicker().pickImage(source: ImageSource.camera)` ([presensi_page.dart:L251-255](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart#L251-255)).
+  * **Meminta Izin Kamera**: Menggunakan `Permission.camera.request()` dari package `permission_handler` sebelum kamera dinyalakan ([presensi_page.dart:L240-250](lib/screens/presensi_page.dart#L240-250)).
+  * **Mengakses Kamera HP**: Menggunakan `ImagePicker().pickImage(source: ImageSource.camera)` ([presensi_page.dart:L251-255](lib/screens/presensi_page.dart#L251-255)).
   * **Kompresi Gambar**: Parameter `imageQuality: 70` disematkan langsung di pemanggilan `pickImage` untuk mengompres kualitas foto menjadi 70% sebelum disimpan guna menghemat ruang penyimpanan server.
-  * **Upload File**: Fungsi `StorageService.uploadFoto(File file)` membaca file gambar sebagai *raw bytes* (`file.readAsBytes()`) lalu mengirimkannya lewat HTTP POST request ke endpoint Supabase Storage bucket `foto-presensi` ([storage_service.dart:L9-30](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/services/storage_service.dart#L9-30)).
+  * **Upload File**: Fungsi `StorageService.uploadFoto(File file)` membaca file gambar sebagai *raw bytes* (`file.readAsBytes()`) lalu mengirimkannya lewat HTTP POST request ke endpoint Supabase Storage bucket `foto-presensi` ([storage_service.dart:L9-30](lib/services/storage_service.dart#L9-30)).
 
 ### 5. Geolocation Sensor (Sistem GPS HP & Geofencing)
-* **File Utama**: [presensi_page.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart).
+* **File Utama**: [presensi_page.dart](lib/screens/presensi_page.dart).
 * **Fungsi/Baris Kode**:
-  * **Pembacaan GPS Sensor**: Menggunakan package `geolocator` untuk memanggil `Geolocator.getCurrentPosition()` yang membaca sensor GPS HP secara real-time ([presensi_page.dart:L180-210](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart#L180-210)).
+  * **Pembacaan GPS Sensor**: Menggunakan package `geolocator` untuk memanggil `Geolocator.getCurrentPosition()` yang membaca sensor GPS HP secara real-time ([presensi_page.dart:L180-210](lib/screens/presensi_page.dart#L180-210)).
   * **Sistem Fallback Kokoh**: Jika sensor GPS HP mati atau izin akses lokasi ditolak oleh pengguna, aplikasi secara cerdas menggunakan koordinat cadangan **Kampus Tengah Undiksha** (`-8.1162`, `115.0894`) sehingga aplikasi tetap bisa dijalankan saat demo presentasi tanpa crash.
 
 ---
@@ -171,11 +171,11 @@ Dua fitur ini dipasang untuk memberikan nilai tambah yang membuat proyek Anda te
 Dosen penguji yang teliti biasanya akan mencari titik celah keamanan atau logika program. Berikut adalah kelemahan-kelemahan sistem Anda beserta jawaban defensif yang aman:
 
 ### Kelemahan 1: Validasi Lokasi Dilakukan di Sisi Client (Client-Side Geofencing)
-* **Penjelasan Kelemahan**: Pengecekan jarak koordinat dilakukan di file [presensi_page.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/screens/presensi_page.dart). Pengguna dapat memanipulasi koordinat GPS lewat aplikasi *Fake GPS* di HP.
+* **Penjelasan Kelemahan**: Pengecekan jarak koordinat dilakukan di file [presensi_page.dart](lib/screens/presensi_page.dart). Pengguna dapat memanipulasi koordinat GPS lewat aplikasi *Fake GPS* di HP.
 * **Jawaban Defensif Anda**: 
   > *"Benar sekali Pak, saat ini kalkulasi jarak geofencing dilakukan di sisi client (aplikasi Flutter) demi menyederhanakan kode prototype. Untuk tingkat produksi (production-ready), idealnya koordinat mentah GPS dikirim ke server backend tertutup, lalu server menghitung jaraknya menggunakan fungsi spasial database (seperti PostGIS di PostgreSQL). Dengan begitu, mahasiswa tidak bisa memanipulasi lokasi presensi lewat modifikasi data client."*
 
-### Kelemahan 2: Cek Duplikasi Presensi Memakar Waktu HP Mahasiswa
+### Kelemahan 2: Cek Duplikasi Presensi Memakai Waktu HP Mahasiswa
 * **Penjelasan Kelemahan**: Di fungsi `sudahPresensiHariIni`, variabel tanggal hari ini dihitung menggunakan `DateTime.now()` di HP. Mahasiswa bisa mengubah setelan jam di HP mereka ke hari kemarin agar bisa presensi susulan.
 * **Jawaban Defensif Anda**:
   > *"Betul Pak. Saat ini filter waktu masih mengandalkan jam internal perangkat handphone pengguna. Untuk implementasi sesungguhnya, pengecekan waktu kehadiran wajib disinkronkan dengan waktu server database (Server Time) menggunakan query database `now()` PostgreSQL agar manipulasi waktu di HP mahasiswa tidak berpengaruh."*
@@ -192,5 +192,5 @@ Kuasai definisi operasional dari istilah-istilah berikut agar Anda terlihat sang
 * **Widget Tree**: Struktur hierarki pohon objek di Flutter yang menggambarkan bagaimana antarmuka pengguna disusun dari elemen induk ke elemen anak (contoh: `Scaffold` -> `Column` -> `TextField`).
 * **State Management (Cubit)**: Sistem terstruktur untuk mengelola siklus perubahan data/status aplikasi dan memerintahkan UI untuk merender ulang secara otomatis saat terjadi perubahan status data tersebut.
 * **Geofencing**: Teknologi pembatasan area geografis virtual di dunia nyata menggunakan koordinat GPS (lintang & bujur) serta perhitungan radius lingkaran jarak aman.
-* **Data Transfer Object (DTO) / Model Class**: Kelas representasi struktur objek data di Flutter (seperti kelas `Presensi` di [presensi.dart](file:///c:/Users/Dwijothamy/develop/flutter_project/presensi_uas/lib/dto/presensi.dart)) yang berfungsi untuk mengonversi data dari objek aplikasi menjadi struktur JSON (`toJson`) untuk dikirim ke API, dan sebaliknya (`fromJson`).
+* **Data Transfer Object (DTO) / Model Class**: Kelas representasi struktur objek data di Flutter (seperti kelas `Presensi` di [presensi.dart](lib/dto/presensi.dart)) yang berfungsi untuk mengonversi data dari objek aplikasi menjadi struktur JSON (`toJson`) untuk dikirim ke API, dan sebaliknya (`fromJson`).
 * **url_launcher**: Package Flutter yang digunakan untuk berinteraksi dengan OS HP guna membuka tautan eksternal (seperti tautan website, koordinat Google Maps, nomor telepon, atau email) ke aplikasi bawaan sistem.
