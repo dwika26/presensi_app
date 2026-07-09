@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../config/app_theme.dart';
 import '../widgets/seal_badge.dart';
+import '../widgets/sifors_logo.dart';
 import '../services/presensi_service.dart';
 import '../dto/presensi.dart';
 
@@ -92,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Row(
                         children: [
-                          const SealBadge(size: 64, icon: Icons.school_rounded),
+                          const SiforsLogo(size: 64),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Column(

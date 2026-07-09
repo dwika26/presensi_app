@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../config/app_theme.dart';
+import '../widgets/sifors_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -50,29 +51,19 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Glowing circular logo
+                // Glowing circular Sifors Logo
                 Container(
-                  width: 96,
-                  height: 96,
                   decoration: BoxDecoration(
-                    color: AppColors.navySurface,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.brass.withOpacity(0.25),
+                        color: AppColors.brass.withOpacity(0.2),
                         blurRadius: 24,
                         spreadRadius: 2,
                       ),
                     ],
-                    border: Border.all(color: AppColors.brass, width: 2),
                   ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.school_rounded,
-                      size: 46,
-                      color: AppColors.brass,
-                    ),
-                  ),
+                  child: const SiforsLogo(size: 96),
                 ),
                 const SizedBox(height: 20),
                 Text(
