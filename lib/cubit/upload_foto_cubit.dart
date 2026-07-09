@@ -14,6 +14,9 @@ class UploadFotoCubit extends Cubit<UploadFotoState> {
     required XFile foto,
     double? latitude,
     double? longitude,
+    String? presenterName,
+    String? presenterProdi,
+    String? tanggalSeminar,
   }) async {
     if (isClosed) return;
     emit(UploadFotoLoading());
@@ -25,6 +28,9 @@ class UploadFotoCubit extends Cubit<UploadFotoState> {
         fotoUrl: fotoUrl,
         latitude: latitude,
         longitude: longitude,
+        presenterName: presenterName,
+        presenterProdi: presenterProdi,
+        tanggalSeminar: tanggalSeminar,
       );
       await PresensiService.createPresensi(presensi);
       if (isClosed) return;

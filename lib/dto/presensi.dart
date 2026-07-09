@@ -6,6 +6,9 @@ class Presensi {
   final double? latitude;
   final double? longitude;
   final DateTime? createdAt;
+  final String? presenterName;
+  final String? presenterProdi;
+  final String? tanggalSeminar;
 
   Presensi({
     this.id,
@@ -15,6 +18,9 @@ class Presensi {
     this.latitude,
     this.longitude,
     this.createdAt,
+    this.presenterName,
+    this.presenterProdi,
+    this.tanggalSeminar,
   });
 
   factory Presensi.fromJson(Map<String, dynamic> json) {
@@ -28,6 +34,9 @@ class Presensi {
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'] as String)
           : null,
+      presenterName: json['presenter_name'] as String?,
+      presenterProdi: json['presenter_prodi'] as String?,
+      tanggalSeminar: json['tanggal_seminar'] as String?,
     );
   }
 
@@ -38,6 +47,9 @@ class Presensi {
       if (fotoUrl != null) 'foto_url': fotoUrl,
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
+      if (presenterName != null) 'presenter_name': presenterName,
+      if (presenterProdi != null) 'presenter_prodi': presenterProdi,
+      if (tanggalSeminar != null) 'tanggal_seminar': tanggalSeminar,
     };
   }
 }

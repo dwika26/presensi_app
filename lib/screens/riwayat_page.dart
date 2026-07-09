@@ -106,13 +106,12 @@ class RiwayatPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final p = list[index];
 
-                  // Splitting/parsing logic for concatenated name
-                  final namaRaw = p.nama;
-                  String studentName = namaRaw;
-                  String? presenterName;
+                  // Smart fallback: check if we have separate columns, otherwise parse old concatenated data
+                  String studentName = p.nama;
+                  String? presenterName = p.presenterName;
 
-                  if (namaRaw.contains(' | Presenter: ')) {
-                    final parts = namaRaw.split(' | Presenter: ');
+                  if ((presenterName == null || presenterName.isEmpty) && p.nama.contains(' | Presenter: ')) {
+                    final parts = p.nama.split(' | Presenter: ');
                     studentName = parts[0].trim();
                     final rest = parts[1];
                     if (rest.contains(' | Prodi: ')) {

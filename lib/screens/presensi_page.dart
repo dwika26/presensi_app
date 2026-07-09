@@ -261,16 +261,16 @@ class _PresensiFormState extends State<_PresensiForm> {
 
     if (!mounted) return;
 
-    // 2. Concatenate nama logic
-    final fullName = "$studentName | Presenter: $presenterName | Prodi: $presenterProdi | Tanggal: $tanggal";
-
-    // 3. Submit with real-time GPS (or fallback) coordinates
+    // 3. Submit with real-time GPS (or fallback) coordinates and separate fields
     context.read<UploadFotoCubit>().submit(
-      nama: fullName,
+      nama: studentName,
       nim: nim,
       foto: _fotoFile!,
       latitude: _latitude,
       longitude: _longitude,
+      presenterName: presenterName,
+      presenterProdi: presenterProdi,
+      tanggalSeminar: tanggal,
     );
   }
 

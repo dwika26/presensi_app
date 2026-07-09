@@ -21,12 +21,12 @@ class PresensiDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final namaRaw = presensi.nama;
     String studentName = namaRaw;
-    String? presenterName;
-    String? presenterProdi;
-    String? tanggalSeminar;
+    String? presenterName = presensi.presenterName;
+    String? presenterProdi = presensi.presenterProdi;
+    String? tanggalSeminar = presensi.tanggalSeminar;
 
-    // Parsing logic for: "Nama Mahasiswa | Presenter: Nama Presenter | Prodi: Prodi Presenter | Tanggal: Tanggal Seminar"
-    if (namaRaw.contains(' | Presenter: ')) {
+    // Parsing logic for old concatenated rows if separate columns are null
+    if ((presenterName == null || presenterName.isEmpty) && namaRaw.contains(' | Presenter: ')) {
       final presenterParts = namaRaw.split(' | Presenter: ');
       studentName = presenterParts[0].trim();
       final rest = presenterParts[1];
