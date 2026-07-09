@@ -8,7 +8,7 @@ import 'screens/splash_screen.dart';
 void main() {
   runApp(
     DevicePreview(
-      enabled: !kReleaseMode,
+      enabled: !kReleaseMode && kIsWeb,
       builder: (context) => const MyApp(),
     ),
   );

@@ -31,7 +31,7 @@ class RiwayatPage extends StatelessWidget {
           builder: (context, state) {
             if (state is RiwayatLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: AppColors.brass),
+                child: CircularProgressIndicator(color: AppColors.inkNavy),
               );
             }
 
@@ -47,7 +47,10 @@ class RiwayatPage extends StatelessWidget {
                       Text(
                         'Gagal memuat riwayat: ${state.message}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.ivory),
+                        style: const TextStyle(
+                          color: AppColors.inkNavy,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
@@ -76,7 +79,7 @@ class RiwayatPage extends StatelessWidget {
                     const Text(
                       'Belum ada riwayat kehadiran',
                       style: TextStyle(
-                        color: AppColors.ivory,
+                        color: AppColors.inkNavy,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -95,8 +98,7 @@ class RiwayatPage extends StatelessWidget {
             }
 
             return RefreshIndicator(
-              color: AppColors.brass,
-              backgroundColor: AppColors.navySurface,
+              color: AppColors.inkNavy,
               onRefresh: () => context.read<RiwayatCubit>().fetchRiwayat(),
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -104,37 +106,41 @@ class RiwayatPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final p = list[index];
 
-                  // Splitting logic
+                  // Splitting/parsing logic for concatenated name
                   final namaRaw = p.nama;
                   String studentName = namaRaw;
                   String? presenterName;
 
                   if (namaRaw.contains(' | Presenter: ')) {
                     final parts = namaRaw.split(' | Presenter: ');
-                    studentName = parts[0];
-                    presenterName = parts.sublist(1).join(' | Presenter: ');
+                    studentName = parts[0].trim();
+                    final rest = parts[1];
+                    if (rest.contains(' | Prodi: ')) {
+                      presenterName = rest.split(' | Prodi: ')[0].trim();
+                    } else {
+                      presenterName = rest.trim();
+                    }
                   }
 
                   return Card(
-                    color: AppColors.navySurface,
+                    color: Colors.white,
                     elevation: 0,
                     margin: const EdgeInsets.only(bottom: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(24),
                       side: BorderSide(
-                        color: AppColors.brass.withOpacity(0.1),
+                        color: AppColors.inkNavy.withOpacity(0.05),
                         width: 1,
                       ),
                     ),
                     child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(24),
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => PresensiDetailScreen(presensi: p),
                         ),
                       ).then((_) {
-                        // Refresh after coming back from detail (in case they made changes or deleted)
                         if (context.mounted) {
                           context.read<RiwayatCubit>().fetchRiwayat();
                         }
@@ -150,7 +156,7 @@ class RiwayatPage extends StatelessWidget {
                               height: 54,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.brass, width: 1.5),
+                                border: Border.all(color: AppColors.inkNavy.withOpacity(0.1), width: 1.5),
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(27),
@@ -159,9 +165,9 @@ class RiwayatPage extends StatelessWidget {
                                         p.fotoUrl!,
                                         fit: BoxFit.cover,
                                         errorBuilder: (context, error, stackTrace) =>
-                                            const Icon(Icons.person, color: AppColors.brass),
+                                            const Icon(Icons.person, color: AppColors.inkNavy),
                                       )
-                                    : const Icon(Icons.person, color: AppColors.brass),
+                                    : const Icon(Icons.person, color: AppColors.inkNavy),
                               ),
                             ),
                             const SizedBox(width: 14),
@@ -173,7 +179,7 @@ class RiwayatPage extends StatelessWidget {
                                   Text(
                                     studentName,
                                     style: const TextStyle(
-                                      color: AppColors.ivory,
+                                      color: AppColors.inkNavy,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                     ),
@@ -182,25 +188,26 @@ class RiwayatPage extends StatelessWidget {
                                   Text(
                                     'NIM ${p.nim}',
                                     style: TextStyle(
-                                      color: AppColors.charcoal.withOpacity(0.85),
+                                      color: AppColors.charcoal.withOpacity(0.7),
                                       fontSize: 12,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  if (presenterName != null) ...[
+                                  if (presenterName != null && presenterName.isNotEmpty) ...[
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
                                         const Icon(
                                           Icons.co_present_rounded,
                                           size: 14,
-                                          color: AppColors.brass,
+                                          color: AppColors.inkNavy,
                                         ),
                                         const SizedBox(width: 5),
                                         Expanded(
                                           child: Text(
                                             'Presenter: $presenterName',
                                             style: const TextStyle(
-                                              color: AppColors.ivory,
+                                              color: AppColors.inkNavy,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -223,8 +230,9 @@ class RiwayatPage extends StatelessWidget {
                                       Text(
                                         _formatTanggal(p.createdAt),
                                         style: TextStyle(
-                                          color: AppColors.charcoal,
+                                          color: AppColors.charcoal.withOpacity(0.8),
                                           fontSize: 11,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ],
@@ -233,47 +241,16 @@ class RiwayatPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            // Verifikasi Fisik Badge
+                            // Mini Campus tag
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.brass.withOpacity(0.12),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                      color: AppColors.brass.withOpacity(0.3),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.check_circle_rounded,
-                                        color: AppColors.brass,
-                                        size: 11,
-                                      ),
-                                      SizedBox(width: 3),
-                                      Text(
-                                        'Terverifikasi Fisik',
-                                        style: TextStyle(
-                                          color: AppColors.brass,
-                                          fontSize: 9,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                // Mini Campus tag
                                 Row(
                                   children: [
                                     const Icon(
                                       Icons.location_on,
-                                      color: AppColors.brass,
+                                      color: AppColors.sage,
                                       size: 12,
                                     ),
                                     const SizedBox(width: 2),
@@ -281,7 +258,8 @@ class RiwayatPage extends StatelessWidget {
                                       'Kampus',
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: AppColors.charcoal.withOpacity(0.8),
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.sage,
                                       ),
                                     ),
                                   ],

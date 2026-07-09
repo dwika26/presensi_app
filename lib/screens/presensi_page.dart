@@ -10,23 +10,19 @@ import '../widgets/seal_badge.dart';
 import '../services/presensi_service.dart';
 
 class PresensiPage extends StatelessWidget {
-  final ValueNotifier<String?>? presenterNotifier;
-
-  const PresensiPage({super.key, this.presenterNotifier});
+  const PresensiPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => UploadFotoCubit(),
-      child: _PresensiForm(presenterNotifier: presenterNotifier),
+      child: const _PresensiForm(),
     );
   }
 }
 
 class _PresensiForm extends StatefulWidget {
-  final ValueNotifier<String?>? presenterNotifier;
-
-  const _PresensiForm({this.presenterNotifier});
+  const _PresensiForm();
 
   @override
   State<_PresensiForm> createState() => _PresensiFormState();
@@ -36,31 +32,55 @@ class _PresensiFormState extends State<_PresensiForm> {
   final _namaController = TextEditingController();
   final _nimController = TextEditingController();
   final _presenterController = TextEditingController();
+  final _presenterProdiController = TextEditingController();
+  final _tanggalController = TextEditingController();
+  DateTime? _selectedDate;
   XFile? _fotoFile;
   Uint8List? _fotoBytes;
 
   @override
-  void initState() {
-    super.initState();
-    _presenterController.text = widget.presenterNotifier?.value ?? '';
-    widget.presenterNotifier?.addListener(_onPresenterChanged);
+  void dispose() {
+    _namaController.dispose();
+    _nimController.dispose();
+    _presenterController.dispose();
+    _presenterProdiController.dispose();
+    _tanggalController.dispose();
+    super.dispose();
   }
 
-  void _onPresenterChanged() {
-    if (mounted) {
+  Future<void> _pilihTanggal(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2026),
+      lastDate: DateTime(2030),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppColors.inkNavy,
+              onPrimary: Colors.white,
+              onSurface: AppColors.inkNavy,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedDate != null) {
       setState(() {
-        _presenterController.text = widget.presenterNotifier?.value ?? '';
+        _selectedDate = pickedDate;
+        _tanggalController.text = "${pickedDate.day} ${_getNamaBulan(pickedDate.month)} ${pickedDate.year}";
       });
     }
   }
 
-  @override
-  void dispose() {
-    widget.presenterNotifier?.removeListener(_onPresenterChanged);
-    _namaController.dispose();
-    _nimController.dispose();
-    _presenterController.dispose();
-    super.dispose();
+  String _getNamaBulan(int month) {
+    const months = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    return months[month - 1];
   }
 
   Future<void> _ambilFoto() async {
@@ -150,8 +170,10 @@ class _PresensiFormState extends State<_PresensiForm> {
     final studentName = _namaController.text.trim();
     final nim = _nimController.text.trim();
     final presenterName = _presenterController.text.trim();
+    final presenterProdi = _presenterProdiController.text.trim();
+    final tanggal = _tanggalController.text.trim();
 
-    if (studentName.isEmpty || nim.isEmpty || presenterName.isEmpty) {
+    if (studentName.isEmpty || nim.isEmpty || presenterName.isEmpty || presenterProdi.isEmpty || tanggal.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: AppColors.rust,
@@ -164,7 +186,7 @@ class _PresensiFormState extends State<_PresensiForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: AppColors.rust,
-          content: Text('Silakan ambil foto bukti fisik card control'),
+          content: Text('Silakan ambil foto bukti fisik'),
         ),
       );
       return;
@@ -197,7 +219,7 @@ class _PresensiFormState extends State<_PresensiForm> {
     if (!mounted) return;
 
     // 2. Concatenate nama logic
-    final fullName = "$studentName | Presenter: $presenterName";
+    final fullName = "$studentName | Presenter: $presenterName | Prodi: $presenterProdi | Tanggal: $tanggal";
 
     // 3. Submit with static Undiksha Kampus Tengah coordinates
     context.read<UploadFotoCubit>().submit(
@@ -220,12 +242,12 @@ class _PresensiFormState extends State<_PresensiForm> {
             _namaController.clear();
             _nimController.clear();
             _presenterController.clear();
-            if (widget.presenterNotifier != null) {
-              widget.presenterNotifier!.value = null;
-            }
+            _presenterProdiController.clear();
+            _tanggalController.clear();
             setState(() {
               _fotoFile = null;
               _fotoBytes = null;
+              _selectedDate = null;
             });
             context.read<UploadFotoCubit>().reset();
           } else if (state is UploadFotoFailure) {
@@ -251,7 +273,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.ivory,
+                    color: AppColors.inkNavy,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -261,12 +283,12 @@ class _PresensiFormState extends State<_PresensiForm> {
                   controller: _namaController,
                   enabled: !isLoading,
                   textCapitalization: TextCapitalization.words,
-                  style: const TextStyle(color: AppColors.ivory),
+                  style: const TextStyle(color: AppColors.inkNavy, fontWeight: FontWeight.w600),
                   decoration: const InputDecoration(
                     labelText: 'Nama Lengkap Mahasiswa',
                     prefixIcon: Icon(
                       Icons.person_outline_rounded,
-                      color: AppColors.brass,
+                      color: AppColors.inkNavy,
                     ),
                   ),
                 ),
@@ -276,12 +298,12 @@ class _PresensiFormState extends State<_PresensiForm> {
                   controller: _nimController,
                   enabled: !isLoading,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppColors.ivory),
+                  style: const TextStyle(color: AppColors.inkNavy, fontWeight: FontWeight.w600),
                   decoration: const InputDecoration(
                     labelText: 'NIM Mahasiswa',
                     prefixIcon: Icon(
                       Icons.badge_outlined,
-                      color: AppColors.brass,
+                      color: AppColors.inkNavy,
                     ),
                   ),
                 ),
@@ -291,45 +313,78 @@ class _PresensiFormState extends State<_PresensiForm> {
                   controller: _presenterController,
                   enabled: !isLoading,
                   textCapitalization: TextCapitalization.words,
-                  style: const TextStyle(color: AppColors.ivory),
-                  decoration: InputDecoration(
+                  style: const TextStyle(color: AppColors.inkNavy, fontWeight: FontWeight.w600),
+                  decoration: const InputDecoration(
                     labelText: 'Nama Presenter Seminar',
-                    prefixIcon: const Icon(
+                    prefixIcon: Icon(
                       Icons.co_present_outlined,
-                      color: AppColors.brass,
+                      color: AppColors.inkNavy,
                     ),
-                    helperText:
-                        'Bisa dipilih otomatis dari Tab Profil / Daftar Presenter',
-                    helperStyle: TextStyle(
-                      color: AppColors.charcoal.withOpacity(0.8),
-                      fontSize: 11,
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                TextField(
+                  controller: _presenterProdiController,
+                  enabled: !isLoading,
+                  textCapitalization: TextCapitalization.words,
+                  style: const TextStyle(color: AppColors.inkNavy, fontWeight: FontWeight.w600),
+                  decoration: const InputDecoration(
+                    labelText: 'Program Studi Presenter',
+                    prefixIcon: Icon(
+                      Icons.school_outlined,
+                      color: AppColors.inkNavy,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                TextField(
+                  controller: _tanggalController,
+                  enabled: !isLoading,
+                  readOnly: true,
+                  onTap: () => _pilihTanggal(context),
+                  style: const TextStyle(color: AppColors.inkNavy, fontWeight: FontWeight.w600),
+                  decoration: const InputDecoration(
+                    labelText: 'Tanggal Seminar',
+                    prefixIcon: Icon(
+                      Icons.calendar_today_outlined,
+                      color: AppColors.inkNavy,
+                    ),
+                    suffixIcon: Icon(
+                      Icons.arrow_drop_down_rounded,
+                      color: AppColors.inkNavy,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                // Grab-style Safe Location Card
+                // Grab-style Safe Location Card (Restyled to clean white)
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.navySurface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppColors.brass.withOpacity(0.2),
-                      width: 1.5,
-                    ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.02),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: AppColors.brass.withOpacity(0.12),
+                          color: AppColors.inkNavy.withOpacity(0.06),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.my_location_rounded,
-                          color: AppColors.brass,
+                          color: AppColors.inkNavy,
                           size: 24,
                         ),
                       ),
@@ -341,8 +396,8 @@ class _PresensiFormState extends State<_PresensiForm> {
                             const Text(
                               'Kampus Tengah Undiksha',
                               style: TextStyle(
-                                color: AppColors.ivory,
-                                fontWeight: FontWeight.bold,
+                                color: AppColors.inkNavy,
+                                fontWeight: FontWeight.w800,
                                 fontSize: 14,
                               ),
                             ),
@@ -350,8 +405,8 @@ class _PresensiFormState extends State<_PresensiForm> {
                             const Text(
                               'Lokasi: Kampus Tengah Undiksha (Akurasi Tinggi)',
                               style: TextStyle(
-                                color: AppColors.brass,
-                                fontWeight: FontWeight.w600,
+                                color: AppColors.sage,
+                                fontWeight: FontWeight.w700,
                                 fontSize: 12,
                               ),
                             ),
@@ -359,8 +414,9 @@ class _PresensiFormState extends State<_PresensiForm> {
                             Text(
                               'Koordinat: -8.11620, 115.08940',
                               style: TextStyle(
-                                color: AppColors.charcoal,
+                                color: AppColors.charcoal.withOpacity(0.7),
                                 fontSize: 11,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -377,23 +433,30 @@ class _PresensiFormState extends State<_PresensiForm> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.ivory,
+                    color: AppColors.inkNavy,
                   ),
                 ),
                 const SizedBox(height: 10),
 
-                // Beautiful Card Photo Box
+                // Beautiful Card Photo Box (Restyled to clean white/grey)
                 Container(
                   height: 220,
                   decoration: BoxDecoration(
-                    color: AppColors.navySurface,
-                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
                     border: Border.all(
                       color: _fotoFile != null
-                          ? AppColors.brass.withOpacity(0.4)
-                          : AppColors.charcoal.withOpacity(0.2),
+                          ? AppColors.inkNavy.withOpacity(0.3)
+                          : AppColors.inkNavy.withOpacity(0.05),
                       width: 1.5,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.02),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: _fotoFile != null
@@ -406,14 +469,14 @@ class _PresensiFormState extends State<_PresensiForm> {
                               top: 12,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
+                                  horizontal: 10,
+                                  vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
                                   color: Colors.black87,
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: AppColors.brass.withOpacity(0.5),
+                                    color: AppColors.sage,
                                   ),
                                 ),
                                 child: const Row(
@@ -421,7 +484,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                                   children: [
                                     Icon(
                                       Icons.check_circle_rounded,
-                                      color: AppColors.brass,
+                                      color: AppColors.sage,
                                       size: 14,
                                     ),
                                     SizedBox(width: 4),
@@ -446,13 +509,13 @@ class _PresensiFormState extends State<_PresensiForm> {
                               Icon(
                                 Icons.add_a_photo_rounded,
                                 size: 48,
-                                color: AppColors.brass.withOpacity(0.8),
+                                color: AppColors.inkNavy.withOpacity(0.4),
                               ),
                               const SizedBox(height: 10),
                               const Text(
                                 'Formulir Kehadiran Seminar',
                                 style: TextStyle(
-                                  color: AppColors.ivory,
+                                  color: AppColors.inkNavy,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 14,
                                 ),
@@ -461,7 +524,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                               Text(
                                 'Ambil foto fisik kartu kontrol seminar',
                                 style: TextStyle(
-                                  color: AppColors.charcoal,
+                                  color: AppColors.charcoal.withOpacity(0.6),
                                   fontSize: 11,
                                 ),
                               ),

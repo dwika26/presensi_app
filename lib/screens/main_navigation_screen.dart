@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
-import 'presenter_page.dart';
 import 'presensi_page.dart';
 import 'riwayat_page.dart';
 import 'profil_page.dart';
@@ -15,7 +14,6 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
-  final ValueNotifier<String?> _selectedPresenterNotifier = ValueNotifier<String?>(null);
 
   late final List<Widget> _screens;
 
@@ -24,24 +22,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     super.initState();
     _screens = [
       const HomeScreen(),
-      PresenterPage(
-        onPresenterSelected: (presenterName) {
-          _selectedPresenterNotifier.value = presenterName;
-          setState(() {
-            _currentIndex = 2; // Switch to Presensi Tab
-          });
-        },
-      ),
-      PresensiPage(presenterNotifier: _selectedPresenterNotifier),
+      const PresensiPage(),
       const RiwayatPage(),
       const ProfilPage(),
     ];
-  }
-
-  @override
-  void dispose() {
-    _selectedPresenterNotifier.dispose();
-    super.dispose();
   }
 
   @override
@@ -77,10 +61,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.grid_view_rounded),
               label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people_alt_rounded),
-              label: 'Presenter',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code_scanner_rounded),

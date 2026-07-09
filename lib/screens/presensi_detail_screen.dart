@@ -22,11 +22,30 @@ class PresensiDetailScreen extends StatelessWidget {
     final namaRaw = presensi.nama;
     String studentName = namaRaw;
     String? presenterName;
+    String? presenterProdi;
+    String? tanggalSeminar;
 
+    // Parsing logic for: "Nama Mahasiswa | Presenter: Nama Presenter | Prodi: Prodi Presenter | Tanggal: Tanggal Seminar"
     if (namaRaw.contains(' | Presenter: ')) {
-      final parts = namaRaw.split(' | Presenter: ');
-      studentName = parts[0];
-      presenterName = parts.sublist(1).join(' | Presenter: ');
+      final presenterParts = namaRaw.split(' | Presenter: ');
+      studentName = presenterParts[0].trim();
+      final rest = presenterParts[1];
+
+      if (rest.contains(' | Prodi: ')) {
+        final prodiParts = rest.split(' | Prodi: ');
+        presenterName = prodiParts[0].trim();
+        final rest2 = prodiParts[1];
+
+        if (rest2.contains(' | Tanggal: ')) {
+          final tanggalParts = rest2.split(' | Tanggal: ');
+          presenterProdi = tanggalParts[0].trim();
+          tanggalSeminar = tanggalParts[1].trim();
+        } else {
+          presenterProdi = rest2.trim();
+        }
+      } else {
+        presenterName = rest.trim();
+      }
     }
 
     return Scaffold(
@@ -42,9 +61,9 @@ class PresensiDetailScreen extends StatelessWidget {
               Container(
                 height: 320,
                 decoration: BoxDecoration(
-                  color: AppColors.navySurface,
+                  color: Colors.white,
                   border: Border(
-                    bottom: BorderSide(color: AppColors.brass.withOpacity(0.2), width: 1.5),
+                    bottom: BorderSide(color: AppColors.inkNavy.withOpacity(0.05), width: 1.5),
                   ),
                 ),
                 child: Image.network(
@@ -65,12 +84,12 @@ class PresensiDetailScreen extends StatelessWidget {
             else
               Container(
                 height: 320,
-                color: AppColors.navySurface,
+                color: Colors.white,
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.badge_outlined, size: 64, color: AppColors.brass.withOpacity(0.5)),
+                      Icon(Icons.badge_outlined, size: 64, color: AppColors.inkNavy.withOpacity(0.3)),
                       const SizedBox(height: 12),
                       const Text('Tidak ada gambar bukti fisik', style: TextStyle(color: AppColors.charcoal)),
                     ],
@@ -83,58 +102,55 @@ class PresensiDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Verification Badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.brass.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.brass.withOpacity(0.3), width: 1),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.verified_rounded, color: AppColors.brass, size: 16),
-                        SizedBox(width: 6),
-                        Text(
-                          'Terverifikasi Fisik (Kartu Kontrol)',
-                          style: TextStyle(
-                            color: AppColors.brass,
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
+                  // Verification Badge was removed as requested
+                  
                   // Student Details
                   Text(
                     studentName,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
+                          color: AppColors.inkNavy,
                         ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'NIM ${presensi.nim}',
                     style: TextStyle(
-                      color: AppColors.charcoal.withOpacity(0.9),
+                      color: AppColors.charcoal.withOpacity(0.8),
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
 
-                  Divider(height: 40, color: AppColors.charcoal.withOpacity(0.2)),
+                  Divider(height: 40, color: AppColors.inkNavy.withOpacity(0.08)),
 
                   // Presenter Row
-                  if (presenterName != null) ...[
+                  if (presenterName != null && presenterName.isNotEmpty) ...[
                     _DetailRow(
                       icon: Icons.co_present_rounded,
                       label: 'Presenter Seminar',
                       value: presenterName,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+
+                  // Presenter Prodi Row
+                  if (presenterProdi != null && presenterProdi.isNotEmpty) ...[
+                    _DetailRow(
+                      icon: Icons.school_rounded,
+                      label: 'Program Studi Presenter',
+                      value: presenterProdi,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+
+                  // Seminar Date Row
+                  if (tanggalSeminar != null && tanggalSeminar.isNotEmpty) ...[
+                    _DetailRow(
+                      icon: Icons.calendar_today_rounded,
+                      label: 'Tanggal Seminar',
+                      value: tanggalSeminar,
                     ),
                     const SizedBox(height: 20),
                   ],
@@ -179,10 +195,10 @@ class _DetailRow extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.brass.withOpacity(0.1),
+            color: AppColors.inkNavy.withOpacity(0.06),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 18, color: AppColors.brass),
+          child: Icon(icon, size: 18, color: AppColors.inkNavy),
         ),
         const SizedBox(width: 14),
         Expanded(
@@ -193,8 +209,8 @@ class _DetailRow extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: 12,
-                  color: AppColors.charcoal,
-                  fontWeight: FontWeight.w500,
+                  color: AppColors.charcoal.withOpacity(0.6),
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 3),
@@ -203,7 +219,7 @@ class _DetailRow extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.ivory,
+                  color: AppColors.inkNavy,
                 ),
               ),
             ],
