@@ -80,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w900,
                         letterSpacing: 2.0,
-                        color: AppColors.ivory,
+                        color: AppColors.inkNavy,
                       ),
                 ),
                 const SizedBox(height: 6),

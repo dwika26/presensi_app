@@ -95,12 +95,6 @@ class ProfilPage extends StatelessWidget {
                       'Universitas',
                       'Universitas Pendidikan Ganesha',
                     ),
-                    const SizedBox(height: 12),
-                    _buildInfoRow(
-                      Icons.check_circle_rounded,
-                      'Status Proyek',
-                      'Siap Demo Ujian',
-                    ),
                   ],
                 ),
               ),

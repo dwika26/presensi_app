@@ -5,14 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 class AppColors {
   AppColors._();
 
-  static const inkNavy = Color(0xFF0F172A); // Slate 900 (Warna Utama/Teks Gelap)
-  static const navySurface = Color(0xFF1E293B); // Slate 800 (Card Gelap)
-  static const brass = Color(0xFFD9E930); // Lime Green Accent (Warna Aksen Modern)
-  static const ivory = Color(0xFFFFFFFF); // Putih Bersih (Card Background)
-  static const parchment = Color(0xFFF8FAFC); // Slate 50 (Scaffold Background)
-  static const charcoal = Color(0xFF334155); // Slate 700 (Teks Sekunder)
-  static const sage = Color(0xFF10B981); // Emerald Green (Status Sukses/Hadir)
-  static const rust = Color(0xFFEF4444); // Red (Status Error/Absen)
+  static const inkNavy = Color(0xFF5B30AC); // Deep Purple (Primary/Text)
+  static const navySurface = Color(0xFFFFFFFF); // Clean White (Cards)
+  static const brass = Color(0xFF00BFA5); // Vibrant Teal (Accents)
+  static const ivory = Color(0xFFFFFFFF); // Pure White
+  static const parchment = Color(0xFFF4F5F9); // Light Grey/Purple (Background)
+  static const charcoal = Color(0xFF5F6368); // Slate Grey (Secondary Text)
+  static const sage = Color(0xFF00BFA5); // Success Teal
+  static const rust = Color(0xFFEF4444); // Error Red
 }
 
 class AppTheme {
