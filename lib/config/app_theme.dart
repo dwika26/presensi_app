@@ -5,14 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 class AppColors {
   AppColors._();
 
-  static const inkNavy = Color(0xFF12213D);
-  static const navySurface = Color(0xFF1C2F52);
-  static const brass = Color(0xFFC9A227);
-  static const ivory = Color(0xFFF4EEDD);
-  static const parchment = Color(0xFFFAF7EF);
-  static const charcoal = Color(0xFF232323);
-  static const sage = Color(0xFF6B9080);
-  static const rust = Color(0xFFA8503B);
+  static const inkNavy = Color(0xFF0F172A); // Primary dark text (slate-900)
+  static const navySurface = Color(0xFFFFFFFF); // Card surfaces (pure white)
+  static const brass = Color(0xFF10B981); // Brand Emerald Green accent
+  static const ivory = Color(0xFF0F172A); // Primary text (slate-900)
+  static const parchment = Color(0xFFF8FAFC); // Scaffold background (slate-50)
+  static const charcoal = Color(0xFF64748B); // Secondary text (slate-500)
+  static const sage = Color(0xFF10B981); // Emerald Green success
+  static const rust = Color(0xFFEF4444); // Error color red
 }
 
 class AppTheme {
@@ -25,65 +25,94 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.parchment,
       colorScheme: base.colorScheme.copyWith(
         primary: AppColors.brass,
-        onPrimary: AppColors.inkNavy,
-        secondary: AppColors.inkNavy,
-        surface: AppColors.parchment,
+        onPrimary: Colors.white,
+        secondary: AppColors.brass,
+        surface: AppColors.navySurface,
         error: AppColors.rust,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.inkNavy,
-        foregroundColor: AppColors.ivory,
+        backgroundColor: Colors.white,
+        foregroundColor: AppColors.inkNavy,
         elevation: 0,
-        centerTitle: false,
-        titleTextStyle: GoogleFonts.fraunces(
-          color: AppColors.ivory,
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
+        centerTitle: true,
+        titleTextStyle: GoogleFonts.manrope(
+          color: AppColors.inkNavy,
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
           letterSpacing: 0.2,
         ),
       ),
       textTheme: GoogleFonts.manropeTextTheme(base.textTheme).copyWith(
-        headlineMedium: GoogleFonts.fraunces(
-          fontSize: 28,
-          fontWeight: FontWeight.w600,
-          color: AppColors.charcoal,
+        headlineMedium: GoogleFonts.manrope(
+          fontSize: 26,
+          fontWeight: FontWeight.w800,
+          color: AppColors.inkNavy,
         ),
-        titleLarge: GoogleFonts.fraunces(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
+        titleLarge: GoogleFonts.manrope(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: AppColors.inkNavy,
+        ),
+        bodyLarge: GoogleFonts.manrope(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: AppColors.inkNavy,
+        ),
+        bodyMedium: GoogleFonts.manrope(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
           color: AppColors.charcoal,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.brass,
-          foregroundColor: AppColors.inkNavy,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          textStyle: GoogleFonts.manrope(fontWeight: FontWeight.w700, letterSpacing: 0.3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          textStyle: GoogleFonts.manrope(
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            letterSpacing: 0.3,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           elevation: 0,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.inkNavy,
-          side: const BorderSide(color: AppColors.brass, width: 1.4),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          foregroundColor: AppColors.brass,
+          side: const BorderSide(color: AppColors.brass, width: 1.6),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+          textStyle: GoogleFonts.manrope(
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: AppColors.inkNavy.withOpacity(0.15)),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.charcoal.withOpacity(0.2)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: AppColors.charcoal.withOpacity(0.2)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.brass, width: 1.6),
         ),
-        labelStyle: GoogleFonts.manrope(color: AppColors.charcoal.withOpacity(0.7)),
+        labelStyle: GoogleFonts.manrope(color: AppColors.charcoal),
+        hintStyle: GoogleFonts.manrope(
+          color: AppColors.charcoal.withOpacity(0.6),
+        ),
       ),
     );
   }

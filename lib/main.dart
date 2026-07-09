@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'config/app_theme.dart';
 import 'screens/main_navigation_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.theme,
       initialRoute: '/',
       routes: {
-        '/': (context) => const MainNavigationScreen(),
+        '/': (context) => const SplashScreen(),
+        '/main': (context) => const MainNavigationScreen(),
       },
     );
   }

@@ -17,7 +17,7 @@ class SealBadge extends StatelessWidget {
       child: CustomPaint(
         painter: _SealPainter(),
         child: Center(
-          child: Icon(icon, color: AppColors.ivory, size: size * 0.38),
+          child: Icon(icon, color: Colors.white, size: size * 0.38),
         ),
       ),
     );

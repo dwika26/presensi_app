@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import '../dto/presensi.dart';
 import '../services/presensi_service.dart';
 import '../services/storage_service.dart';
@@ -11,7 +11,7 @@ class UploadFotoCubit extends Cubit<UploadFotoState> {
   Future<void> submit({
     required String nama,
     required String nim,
-    required File foto,
+    required XFile foto,
     double? latitude,
     double? longitude,
   }) async {
