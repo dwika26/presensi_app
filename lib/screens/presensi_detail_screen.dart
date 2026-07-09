@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../config/app_theme.dart';
 import '../dto/presensi.dart';
 
 class PresensiDetailScreen extends StatelessWidget {
   final Presensi presensi;
   const PresensiDetailScreen({super.key, required this.presensi});
+
+  Future<void> _openMap(double latitude, double longitude) async {
+    final googleMapsUrl = Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitude,$longitude");
+    try {
+      await launchUrl(googleMapsUrl, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint("Gagal membuka Google Maps: $e");
+    }
+  }
 
   String _formatTanggal(DateTime? dt) {
     if (dt == null) return '-';
@@ -172,6 +182,27 @@ class PresensiDetailScreen extends StatelessWidget {
                             ? 'Kampus Tengah Undiksha (${presensi.latitude!.toStringAsFixed(5)}, ${presensi.longitude!.toStringAsFixed(5)})'
                             : 'Lokasi Perangkat (${presensi.latitude!.toStringAsFixed(5)}, ${presensi.longitude!.toStringAsFixed(5)})')
                         : 'Tidak tercatat',
+                    extra: presensi.latitude != null
+                        ? TextButton.icon(
+                            onPressed: () => _openMap(presensi.latitude!, presensi.longitude!),
+                            style: TextButton.styleFrom(
+                              backgroundColor: AppColors.inkNavy.withOpacity(0.06),
+                              foregroundColor: AppColors.inkNavy,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            ),
+                            icon: const Icon(Icons.map_outlined, size: 16),
+                            label: const Text(
+                              'Buka di Google Maps',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          )
+                        : null,
                   ),
                 ],
               ),
@@ -187,7 +218,14 @@ class _DetailRow extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
-  const _DetailRow({required this.icon, required this.label, required this.value});
+  final Widget? extra;
+
+  const _DetailRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.extra,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -224,6 +262,10 @@ class _DetailRow extends StatelessWidget {
                   color: AppColors.inkNavy,
                 ),
               ),
+              if (extra != null) ...[
+                const SizedBox(height: 8),
+                extra!,
+              ],
             ],
           ),
         ),
