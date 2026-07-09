@@ -48,11 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
               final allPresensi = snapshot.data ?? [];
               final myCount = allPresensi.length;
               const int targetCount = 10;
-              final double progressPercentage = (myCount / targetCount).clamp(0.0, 1.0);
+              final double progressPercentage = (myCount / targetCount).clamp(
+                0.0,
+                1.0,
+              );
 
               return SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -62,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Text(
                           'Presensi SIFORS',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.inkNavy,
@@ -79,7 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
+                        border: Border.all(
+                          color: AppColors.inkNavy.withOpacity(0.05),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.02),
@@ -127,7 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
+                        border: Border.all(
+                          color: AppColors.inkNavy.withOpacity(0.05),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.02),
@@ -148,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   value: progressPercentage,
                                   strokeWidth: 10,
                                   color: AppColors.inkNavy,
-                                  backgroundColor: AppColors.inkNavy.withOpacity(0.06),
+                                  backgroundColor: AppColors.inkNavy
+                                      .withOpacity(0.06),
                                   strokeCap: StrokeCap.round,
                                 ),
                                 Center(
@@ -168,7 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.charcoal.withOpacity(0.6),
+                                          color: AppColors.charcoal.withOpacity(
+                                            0.6,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -192,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'Anda telah menghadiri $myCount dari target $targetCount seminar proposal semester ini.',
+                                  'Anda telah menghadiri $myCount dari target $targetCount seminar proposal.',
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: AppColors.charcoal.withOpacity(0.8),
@@ -206,7 +220,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: LinearProgressIndicator(
                                     value: progressPercentage,
                                     color: AppColors.inkNavy,
-                                    backgroundColor: AppColors.inkNavy.withOpacity(0.06),
+                                    backgroundColor: AppColors.inkNavy
+                                        .withOpacity(0.06),
                                     minHeight: 6,
                                   ),
                                 ),
@@ -248,7 +263,10 @@ class _RealTimeClockCardState extends State<_RealTimeClockCard> {
     super.initState();
     _timeString = _formatDateTime(DateTime.now());
     _dateString = _formatDate(DateTime.now());
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTime());
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (Timer t) => _getTime(),
+    );
   }
 
   @override
@@ -275,10 +293,28 @@ class _RealTimeClockCardState extends State<_RealTimeClockCard> {
   }
 
   String _formatDate(DateTime dt) {
-    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const days = [
+      'Minggu',
+      'Senin',
+      'Selasa',
+      'Rabu',
+      'Kamis',
+      'Jumat',
+      'Sabtu',
+    ];
     const months = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
     ];
     return '${days[dt.weekday - 1]}, ${dt.day} ${months[dt.month - 1]} ${dt.year}';
   }
@@ -304,7 +340,11 @@ class _RealTimeClockCardState extends State<_RealTimeClockCard> {
         children: [
           Row(
             children: [
-              const Icon(Icons.access_time_rounded, color: AppColors.charcoal, size: 20),
+              const Icon(
+                Icons.access_time_rounded,
+                color: AppColors.charcoal,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Text(
                 'Waktu Presensi',
