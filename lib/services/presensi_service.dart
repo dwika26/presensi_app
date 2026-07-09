@@ -55,4 +55,15 @@ class PresensiService {
       throw Exception('Gagal cek presensi: ${response.statusCode}');
     }
   }
+
+  static Future<bool> deletePresensi(int id) async {
+    final url = Uri.parse('${SupabaseConfig.baseUrl}/presensi?id=eq.$id');
+    final response = await http.delete(url, headers: _headers);
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      return true;
+    } else {
+      throw Exception('Gagal menghapus presensi: ${response.statusCode} ${response.body}');
+    }
+  }
 }

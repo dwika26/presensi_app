@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config/app_theme.dart';
 import '../dto/presensi.dart';
+import '../services/presensi_service.dart';
 
 class PresensiDetailScreen extends StatelessWidget {
   final Presensi presensi;
@@ -13,6 +14,88 @@ class PresensiDetailScreen extends StatelessWidget {
       await launchUrl(googleMapsUrl, mode: LaunchMode.externalApplication);
     } catch (e) {
       debugPrint("Gagal membuka Google Maps: $e");
+    }
+  }
+
+  Future<void> _hapusPresensi(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text(
+          'Hapus Presensi',
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            color: AppColors.inkNavy,
+          ),
+        ),
+        content: const Text(
+          'Apakah Anda yakin ingin menghapus data presensi ini? Tindakan ini tidak dapat dibatalkan.',
+          style: TextStyle(
+            color: AppColors.charcoal,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text(
+              'Batal',
+              style: TextStyle(
+                color: AppColors.charcoal,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.rust,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: const Text(
+              'Hapus',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    if (!context.mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(color: AppColors.inkNavy),
+      ),
+    );
+
+    try {
+      await PresensiService.deletePresensi(presensi.id!);
+      if (context.mounted) {
+        Navigator.pop(context); // Pop loading HUD
+        Navigator.pop(context, true); // Return true indicating deletion
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.pop(context); // Pop loading HUD
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: AppColors.rust,
+            content: Text('Gagal menghapus: $e'),
+          ),
+        );
+      }
     }
   }
 
@@ -61,6 +144,14 @@ class PresensiDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Kehadiran'),
+        actions: [
+          if (presensi.id != null)
+            IconButton(
+              icon: const Icon(Icons.delete_outline_rounded, color: AppColors.rust),
+              tooltip: 'Hapus Presensi',
+              onPressed: () => _hapusPresensi(context),
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

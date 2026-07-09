@@ -134,14 +134,20 @@ class RiwayatPage extends StatelessWidget {
                     ),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(24),
-                      onTap: () => Navigator.push(
+                      onTap: () => Navigator.push<bool>(
                         context,
                         MaterialPageRoute(
                           builder: (_) => PresensiDetailScreen(presensi: p),
                         ),
-                      ).then((_) {
-                        if (context.mounted) {
+                      ).then((deleted) {
+                        if (deleted == true && context.mounted) {
                           context.read<RiwayatCubit>().fetchRiwayat();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: AppColors.inkNavy,
+                              content: Text('Presensi berhasil dihapus'),
+                            ),
+                          );
                         }
                       }),
                       child: Padding(
