@@ -85,8 +85,9 @@ class _PresensiFormState extends State<_PresensiForm> {
       barrierColor: Colors.black54,
       builder: (dialogContext) {
         Future.delayed(const Duration(milliseconds: 1400), () {
-          if (Navigator.of(dialogContext).canPop())
+          if (Navigator.of(dialogContext).canPop()) {
             Navigator.of(dialogContext).pop();
+          }
         });
         return Dialog(
           backgroundColor: Colors.transparent,

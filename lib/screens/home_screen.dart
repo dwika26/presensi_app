@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../config/app_theme.dart';
 import '../widgets/seal_badge.dart';
-import 'presensi_screen.dart';
+import '../services/presensi_service.dart';
+import '../dto/presensi.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -58,314 +59,294 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const String targetNim = '2415091032';
+
     return Scaffold(
+      backgroundColor: AppColors.parchment,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Row (Menu, Title, Avatar)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: FutureBuilder<List<Presensi>>(
+          future: PresensiService.getPresensiList(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.brass),
+              );
+            }
+
+            final allPresensi = snapshot.data ?? [];
+            final myPresensi = allPresensi.where((p) => p.nim == targetNim).toList();
+            final myCount = myPresensi.length;
+            const int targetCount = 10;
+            final double progressPercentage = (myCount / targetCount).clamp(0.0, 1.0);
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.notes_rounded, color: AppColors.inkNavy),
-                      onPressed: () {},
-                    ),
-                  ),
-                  Text(
-                    'Presensi SIFORS',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.inkNavy,
-                        ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.brass, width: 2),
-                    ),
-                    child: const CircleAvatar(
-                      radius: 18,
-                      backgroundColor: AppColors.inkNavy,
-                      child: Text(
-                        'JD',
-                        style: TextStyle(
+                  // Header Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
                           color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.03),
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.notes_rounded, color: AppColors.inkNavy),
+                          onPressed: () {},
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 28),
-
-              // Welcome Text
-              Text(
-                'Selamat Pagi,',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.charcoal.withOpacity(0.6),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Rekan Mahasiswa 👋',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.inkNavy,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Stats Row (Lime & Soft-Grey Cards)
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                      decoration: BoxDecoration(
-                        color: AppColors.brass,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.brass.withOpacity(0.2),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hadir Hari Ini',
-                            style: TextStyle(
+                      Text(
+                        'Presensi SIFORS',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
                               color: AppColors.inkNavy,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 13,
                             ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            '18',
-                            style: TextStyle(
-                              color: AppColors.inkNavy,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 28,
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.02),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Sakit / Izin',
-                            style: TextStyle(
-                              color: AppColors.charcoal.withOpacity(0.7),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            '02',
-                            style: TextStyle(
-                              color: AppColors.inkNavy,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 28,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-
-              // Main Attendance Card
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
-                      blurRadius: 20,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.bookmark_added_outlined, color: AppColors.charcoal, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Presensi Harian',
-                          style: TextStyle(
-                            color: AppColors.charcoal.withOpacity(0.7),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.brass, width: 2),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      _timeString,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.inkNavy,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _dateString,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.charcoal.withOpacity(0.6),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Divider(color: AppColors.inkNavy.withOpacity(0.08)),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Icon(Icons.access_time_rounded, color: AppColors.charcoal.withOpacity(0.7), size: 16),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Jadwal Kuliah: 08:00 - 17:00 WITA',
-                          style: TextStyle(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.inkNavy,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.location_on_rounded, color: AppColors.charcoal.withOpacity(0.7), size: 16),
-                        const SizedBox(width: 8),
-                        const Expanded(
+                        child: const CircleAvatar(
+                          radius: 18,
+                          backgroundColor: AppColors.inkNavy,
                           child: Text(
-                            'Lokasi: Kampus Tengah Undiksha (Singaraja)',
-                            style: TextStyle(
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.inkNavy,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const PresensiScreen()),
-                          );
-                        },
-                        child: const Text('Kirim Presensi Sekarang'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Bottom Info Card (Visual Feature Demonstration)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.inkNavy,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    const SealBadge(size: 48),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Status Sistem',
+                            'AP',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Koneksi Supabase Aktif & Lokasi Aman.',
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 28),
+
+                  // Welcome Card
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                    child: Row(
+                      children: [
+                        const SealBadge(size: 64, icon: Icons.school_rounded),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Selamat Datang, Adel!',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.inkNavy,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              const Text(
+                                'NIM: 2415091032',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.charcoal,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Program Studi Sistem Informasi',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.charcoal.withOpacity(0.6),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Point Progress Card
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 96,
+                          height: 96,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              CircularProgressIndicator(
+                                value: progressPercentage,
+                                strokeWidth: 10,
+                                color: AppColors.brass,
+                                backgroundColor: AppColors.inkNavy.withOpacity(0.06),
+                                strokeCap: StrokeCap.round,
+                              ),
+                              Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '$myCount',
+                                      style: const TextStyle(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.w900,
+                                        color: AppColors.inkNavy,
+                                      ),
+                                    ),
+                                    Text(
+                                      '/$targetCount',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.charcoal.withOpacity(0.6),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Poin Kehadiran',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.inkNavy,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                'Anda telah menghadiri $myCount dari target $targetCount seminar proposal semester ini.',
+                                style: TextStyle(
+                                  fontSize: 12.5,
+                                  color: AppColors.charcoal.withOpacity(0.8),
+                                  height: 1.4,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: LinearProgressIndicator(
+                                  value: progressPercentage,
+                                  color: AppColors.brass,
+                                  backgroundColor: AppColors.inkNavy.withOpacity(0.06),
+                                  minHeight: 6,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Real-time Clock Card
+                  Container(
+                    padding: const EdgeInsets.all(22),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: AppColors.inkNavy.withOpacity(0.05)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time_rounded, color: AppColors.charcoal, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Waktu Presensi',
+                              style: TextStyle(
+                                color: AppColors.charcoal.withOpacity(0.7),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _timeString,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.inkNavy,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _dateString,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.charcoal.withOpacity(0.6),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
