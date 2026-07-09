@@ -166,9 +166,11 @@ class PresensiDetailScreen extends StatelessWidget {
                   // Location Row
                   _DetailRow(
                     icon: Icons.my_location_rounded,
-                    label: 'Lokasi Demo Presensi',
+                    label: 'Lokasi Presensi',
                     value: presensi.latitude != null
-                        ? 'Kampus Tengah Undiksha (${presensi.latitude!.toStringAsFixed(5)}, ${presensi.longitude!.toStringAsFixed(5)})'
+                        ? (((presensi.latitude! - -8.1162).abs() < 0.0001 && (presensi.longitude! - 115.0894).abs() < 0.0001)
+                            ? 'Kampus Tengah Undiksha (${presensi.latitude!.toStringAsFixed(5)}, ${presensi.longitude!.toStringAsFixed(5)})'
+                            : 'Lokasi Perangkat (${presensi.latitude!.toStringAsFixed(5)}, ${presensi.longitude!.toStringAsFixed(5)})')
                         : 'Tidak tercatat',
                   ),
                 ],
