@@ -59,38 +59,18 @@ Berikut adalah lokasi persis pemenuhan kriteria wajib UAS di dalam kode Anda aga
 
 ## BAGIAN 2 — Alur Aplikasi End-to-End
 
-Berikut adalah alur lengkap di balik layar sejak pengguna mengisi data presensi hingga data tercatat aman di server:
+Berikut adalah alur lengkap langkah-demi-langkah proses presensi di balik layar:
 
-```mermaid
-sequenceDiagram
-    actor User as Mahasiswa
-    participant UI as PresensiPage
-    participant GPS as Geolocator
-    participant Cubit as UploadFotoCubit
-    participant Storage as StorageService (Supabase)
-    participant DB as PresensiService (Supabase)
-
-    User->>UI: Isi Formulir Presensi & Ambil Foto (Kamera)
-    User->>UI: Klik Tombol "Kirim Presensi"
-    UI->>DB: Panggil sudahPresensiHariIni(nim)
-    DB-->>UI: Kembalikan status (Belum Presensi / Lolos)
-    UI->>GPS: Minta koordinat GPS Real-time
-    alt GPS Aktif & Diizinkan
-        GPS-->>UI: Kirim koordinat Sensor HP (lat, long)
-    else GPS Mati / Ditolak
-        GPS-->>UI: Fallback ke Koordinat Undiksha (-8.1162, 115.0894)
-    end
-    UI->>Cubit: Jalankan submit() dengan data lengkap
-    activate Cubit
-    Cubit->>UI: Emit(UploadFotoLoading)
-    Cubit->>Storage: Panggil uploadFoto(foto) (Kirim bytes gambar)
-    Storage-->>Cubit: Kembalikan Public URL Foto
-    Cubit->>DB: Panggil createPresensi(Presensi dengan fotoUrl, lokasi, & detail presenter)
-    DB-->>Cubit: Status 201 Created (Sukses)
-    Cubit->>UI: Emit(UploadFotoSuccess)
-    deactivate Cubit
-    UI-->>User: Tampilkan dialog animasi SealBadge & form di-clear
-```
+1. **Mahasiswa mengisi data** (Nama, NIM, Detail Presenter) dan mengambil foto bukti kehadiran, lalu menekan tombol **"Kirim Presensi"**.
+2. **Cek Duplikasi Presensi:** Aplikasi (`PresensiPage`) melakukan pengecekan ke database (`PresensiService`) untuk memastikan NIM mahasiswa belum melakukan presensi hari ini.
+3. **Pembacaan GPS Sensor:** Aplikasi meminta data koordinat ke GPS HP (`Geolocator`):
+   * **Jika sensor GPS aktif & diizinkan:** Sensor mengirim koordinat asli real-time lokasi mahasiswa.
+   * **Jika sensor GPS mati / ditolak:** Aplikasi otomatis menggunakan koordinat cadangan Kampus Undiksha (`-8.1162`, `115.0894`) sebagai *fallback*.
+4. **Proses Upload Gambar:** Cubit (`UploadFotoCubit`) memicu `StorageService` untuk mengunggah file foto bukti ke Supabase Storage Bucket (`foto-presensi`).
+5. **Dapatkan URL Gambar:** Supabase Storage menyimpan file dan mengembalikan alamat tautan publik (URL) foto tersebut kepada aplikasi.
+6. **Simpan Rekaman Database:** Cubit (`UploadFotoCubit`) mengirimkan data presensi lengkap (Nama, NIM, koordinat GPS, URL foto, Nama Presenter, Prodi Presenter, dan Tanggal) ke tabel database Supabase via `PresensiService.createPresensi()`.
+7. **Konfirmasi Sukses:** Database Supabase membalas dengan status HTTP **201 Created** (sukses).
+8. **Pemberitahuan UI:** Aplikasi menampilkan dialog animasi stempel emas (`SealBadge`) sebagai bukti sah kehadiran, mengosongkan formulir input, dan me-refresh daftar kehadiran di halaman Riwayat serta jumlah poin di halaman Home.
 
 ### Langkah demi Langkah di Tingkat Kode:
 1. **Input Data & Foto**: Mahasiswa mengetik Nama, NIM, Detail Presenter, dan menekan "Ambil Foto". Hasil jepretan disimpan di memori lokal HP sebagai objek `File? _fotoFile`.
