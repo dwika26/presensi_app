@@ -15,6 +15,7 @@ class UploadFotoCubit extends Cubit<UploadFotoState> {
     double? latitude,
     double? longitude,
   }) async {
+    if (isClosed) return;
     emit(UploadFotoLoading());
     try {
       final fotoUrl = await StorageService.uploadFoto(foto);
@@ -26,11 +27,16 @@ class UploadFotoCubit extends Cubit<UploadFotoState> {
         longitude: longitude,
       );
       await PresensiService.createPresensi(presensi);
+      if (isClosed) return;
       emit(UploadFotoSuccess());
     } catch (e) {
+      if (isClosed) return;
       emit(UploadFotoFailure(e.toString()));
     }
   }
 
-  void reset() => emit(UploadFotoIdle());
+  void reset() {
+    if (isClosed) return;
+    emit(UploadFotoIdle());
+  }
 }

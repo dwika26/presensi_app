@@ -8,11 +8,14 @@ class RiwayatCubit extends Cubit<RiwayatState> {
   }
 
   Future<void> fetchRiwayat() async {
+    if (isClosed) return;
     emit(RiwayatLoading());
     try {
       final data = await PresensiService.getPresensiList();
+      if (isClosed) return;
       emit(RiwayatLoaded(data));
     } catch (e) {
+      if (isClosed) return;
       emit(RiwayatError(e.toString()));
     }
   }
