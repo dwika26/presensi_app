@@ -101,7 +101,7 @@ class ProfilPage extends StatelessWidget {
             const SizedBox(height: 24),
 
             const Text(
-              'Tim Pengembang Kelompok',
+              'Tim Pengembang',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,

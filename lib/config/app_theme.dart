@@ -5,14 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 class AppColors {
   AppColors._();
 
-  static const inkNavy = Color(0xFF0F172A); // Deep Navy (Primary/Text)
-  static const navySurface = Color(0xFFFFFFFF); // Clean White (Cards)
-  static const brass = Color(0xFF2563EB); // Royal Blue Accent (Replaces Teal Accent)
+  static const inkNavy = Color(0xFF0F172A); // Deep Navy (Primary Text/Buttons)
+  static const navySurface = Color(0xFFFFFFFF); // Pure White (Cards)
+  static const brass = Color(0xFF1E3A8A); // Classic Navy (Highlights/Icons)
   static const ivory = Color(0xFFFFFFFF); // Pure White
-  static const parchment = Color(0xFFF8FAFC); // Light Slate (Background)
-  static const charcoal = Color(0xFF475569); // Slate Grey (Secondary Text)
-  static const sage = Color(0xFF10B981); // Success Green
-  static const rust = Color(0xFFEF4444); // Error Red
+  static const parchment = Color(0xFFF8FAFC); // Very Light Slate/White (Background)
+  static const charcoal = Color(0xFF1E293B); // Dark Slate Black (Body Text)
+  static const sage = Color(0xFF1E3A8A); // Classic Navy (Success indicators)
+  static const rust = Color(0xFF0F172A); // Deep Navy (Error/Warning indicators)
 }
 
 class AppTheme {

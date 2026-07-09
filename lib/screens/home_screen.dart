@@ -30,8 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const String targetNim = '2415091032';
-
     return Scaffold(
       backgroundColor: AppColors.parchment,
       body: SafeArea(
@@ -48,8 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
 
               final allPresensi = snapshot.data ?? [];
-              final myPresensi = allPresensi.where((p) => p.nim == targetNim).toList();
-              final myCount = myPresensi.length;
+              final myCount = allPresensi.length;
               const int targetCount = 10;
               final double progressPercentage = (myCount / targetCount).clamp(0.0, 1.0);
 
@@ -100,29 +97,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Selamat Datang, Adel!',
+                                  'Selamat Datang',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.inkNavy,
                                   ),
                                 ),
-                                const SizedBox(height: 2),
+                                const SizedBox(height: 4),
                                 const Text(
-                                  'NIM: 2415091032',
+                                  'Mahasiswa Sistem Informasi',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.charcoal,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Program Studi Sistem Informasi',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.charcoal.withOpacity(0.6),
-                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],

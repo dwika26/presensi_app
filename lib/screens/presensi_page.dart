@@ -270,7 +270,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                 const Text(
                   'Formulir Kehadiran',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.inkNavy,
                   ),
@@ -429,7 +429,7 @@ class _PresensiFormState extends State<_PresensiForm> {
                 const Text(
                   'Bukti Kehadiran Fisik',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: AppColors.inkNavy,
                   ),
