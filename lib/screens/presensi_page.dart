@@ -9,6 +9,7 @@ import '../cubit/upload_foto_state.dart';
 import '../config/app_theme.dart';
 import '../widgets/seal_badge.dart';
 import '../services/presensi_service.dart';
+import '../services/auth_service.dart';
 
 class PresensiPage extends StatelessWidget {
   const PresensiPage({super.key});
@@ -47,6 +48,18 @@ class _PresensiFormState extends State<_PresensiForm> {
   void initState() {
     super.initState();
     _initLocation();
+    _loadUserSession();
+  }
+
+  Future<void> _loadUserSession() async {
+    final nama = await AuthService.getLoggedInNama();
+    final nim = await AuthService.getLoggedInNim();
+    if (mounted && nama != null && nim != null) {
+      setState(() {
+        _namaController.text = nama;
+        _nimController.text = nim;
+      });
+    }
   }
 
   Future<void> _initLocation() async {
@@ -320,17 +333,22 @@ class _PresensiFormState extends State<_PresensiForm> {
                 ),
                 const SizedBox(height: 16),
 
-                // Form Fields
+                 // Form Fields
                 TextField(
                   controller: _namaController,
-                  enabled: !isLoading,
+                  readOnly: true,
                   textCapitalization: TextCapitalization.words,
-                  style: const TextStyle(color: AppColors.inkNavy, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: AppColors.inkNavy.withOpacity(0.6), fontWeight: FontWeight.w600),
                   decoration: const InputDecoration(
                     labelText: 'Nama Lengkap Mahasiswa',
                     prefixIcon: Icon(
                       Icons.person_outline_rounded,
                       color: AppColors.inkNavy,
+                    ),
+                    suffixIcon: Icon(
+                      Icons.lock_outline_rounded,
+                      color: Colors.grey,
+                      size: 18,
                     ),
                   ),
                 ),
@@ -338,14 +356,19 @@ class _PresensiFormState extends State<_PresensiForm> {
 
                 TextField(
                   controller: _nimController,
-                  enabled: !isLoading,
+                  readOnly: true,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppColors.inkNavy, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: AppColors.inkNavy.withOpacity(0.6), fontWeight: FontWeight.w600),
                   decoration: const InputDecoration(
                     labelText: 'NIM Mahasiswa',
                     prefixIcon: Icon(
                       Icons.badge_outlined,
                       color: AppColors.inkNavy,
+                    ),
+                    suffixIcon: Icon(
+                      Icons.lock_outline_rounded,
+                      color: Colors.grey,
+                      size: 18,
                     ),
                   ),
                 ),

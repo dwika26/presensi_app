@@ -4,6 +4,7 @@ import '../config/app_theme.dart';
 import '../widgets/sifors_logo.dart';
 import '../services/presensi_service.dart';
 import '../dto/presensi.dart';
+import '../services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,17 +14,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Presensi>> _presensiFuture;
+  String _userName = 'Mahasiswa';
+  String _userNim = '';
+  late Future<List<Presensi>> _presensiFuture = Future.value([]);
 
   @override
   void initState() {
     super.initState();
-    _presensiFuture = PresensiService.getPresensiList();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final name = await AuthService.getLoggedInNama();
+    final nim = await AuthService.getLoggedInNim();
+    if (mounted) {
+      setState(() {
+        _userName = name ?? 'Mahasiswa';
+        _userNim = nim ?? '';
+        _presensiFuture = PresensiService.getPresensiListByUser(_userNim);
+      });
+    }
   }
 
   Future<void> _handleRefresh() async {
     setState(() {
-      _presensiFuture = PresensiService.getPresensiList();
+      _presensiFuture = PresensiService.getPresensiListByUser(_userNim);
     });
   }
 
@@ -100,25 +115,36 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           const SiforsLogo(size: 64),
                           const SizedBox(width: 16),
-                          Expanded(
+                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Selamat Datang',
+                                Text(
+                                  'Selamat Datang,',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.charcoal.withOpacity(0.6),
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  _userName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.inkNavy,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
-                                  'Mahasiswa Sistem Informasi',
+                                const SizedBox(height: 2),
+                                Text(
+                                  'NIM $_userNim',
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: AppColors.charcoal,
+                                    color: AppColors.charcoal.withOpacity(0.8),
                                   ),
                                 ),
                               ],

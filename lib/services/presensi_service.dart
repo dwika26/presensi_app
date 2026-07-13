@@ -24,6 +24,20 @@ class PresensiService {
     }
   }
 
+  static Future<List<Presensi>> getPresensiListByUser(String nim) async {
+    final url = Uri.parse(
+        '${SupabaseConfig.baseUrl}/presensi?select=*&nim=eq.$nim&order=created_at.desc');
+    final response = await http.get(url, headers: _headers);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Presensi.fromJson(json)).toList();
+    } else {
+      throw Exception(
+          'Gagal ambil data presensi user: ${response.statusCode} ${response.body}');
+    }
+  }
+
   static Future<bool> createPresensi(Presensi presensi) async {
     final url = Uri.parse('${SupabaseConfig.baseUrl}/presensi');
     final response = await http.post(

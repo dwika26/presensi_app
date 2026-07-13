@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../config/app_theme.dart';
 import '../widgets/sifors_logo.dart';
+import '../services/auth_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,10 +28,14 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
 
-    // Hold for 2.5 seconds, then transition to main navigation
-    Timer(const Duration(milliseconds: 2500), () {
+    // Hold for 2.5 seconds, then check login status and transition
+    Timer(const Duration(milliseconds: 2500), () async {
+      final isLoggedIn = await AuthService.isLoggedIn();
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/main');
+        Navigator.pushReplacementNamed(
+          context,
+          isLoggedIn ? '/main' : '/login',
+        );
       }
     });
   }

@@ -4,6 +4,7 @@ import 'package:device_preview/device_preview.dart';
 import 'config/app_theme.dart';
 import 'screens/main_navigation_screen.dart';
 import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreen(),
         '/main': (context) => const MainNavigationScreen(),
+        '/login': (context) => const LoginScreen(),
       },
     );
   }
